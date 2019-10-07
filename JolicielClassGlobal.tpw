@@ -1,0 +1,276 @@
+#!------------------------------------------------------------------------------
+#EXTENSION(GlobalEmbedObject,'Joliciel Global Class Manager instance'),APPLICATION,MULTI,DESCRIPTION('GlobalEmbedObject - ' & %ThisObjectName & ' An Instance Of: ' & %ABCBaseClass )
+#!------------------------------------------------------------------------------
+  #INSERT(%JolicielOOPPrompts(JoliClassGlobalManager))
+  
+#PREPARE
+  #SET(%LinkProjectSymbolValue,1)
+  #SET(%DllProjectSymbolValue,0)
+  #SET(%GlobalObject,'NO')
+  #CALL(%ReadABCFiles(ABC))
+  #CALL(%SetClassDefaults(ABC),'jc' & %ApplicationTemplateInstance ,'jc' & %ApplicationTemplateInstance,'none')
+  #SET (%UseDefaultABCBaseClass,%False)
+  #SET (%UseABCBaseClass,%True)
+#ENDPREPARE
+
+#SHEET
+  #TAB('Class')
+    #DISPLAY()
+    #DISPLAY()
+    #WITH(%ClassItem, 'jc' & %ApplicationTemplateInstance)
+      #INSERT(%GlobalClassPrompts(ABC))
+    #ENDWITH
+    #DISPLAY()
+    #BOXED('Project Compiler Symbol Settings')
+      #DISPLAY()
+      #DISPLAY('If the Project Compiler Symbol Settings is enabled the values to the symbols')
+      #DISPLAY('will be added or modified to the Project Compiler Options')
+      #PROMPT('Enabling Project Compiler Symbol Settings',CHECK),%ProjectCompilerSymbolSettings,DEFAULT(0)
+        #DISPLAY('If Export Project Compiler Symbol is enabled only the Export project symbol is required')
+        #DISPLAY('otherwise a LinkMode and DllMode project symbols are required')
+      #ENABLE(%ProjectCompilerSymbolSettings=1)
+        #PROMPT('Enabling Export Project Symbol Setting',CHECK),%ExportProjectSymbolSetting,DEFAULT(0)
+      #ENDENABLE
+      #ENABLE(%ProjectCompilerSymbolSettings=1)
+        #BOXED('Defined Symbols'),WHERE(%ExportProjectSymbolSetting=0 AND %ProjectCompilerSymbolSettings=1)
+          #DISPLAY()
+          #ENABLE(%ExportProjectSymbolSetting=0)
+            #PROMPT('Link project compiler defined symbol',@s100),%LinkProjectSymbol,DEFAULT('_ABCLinkMode_'),REQ
+            #PROMPT('Dll project compiler defined symbol',@s100),%DllProjectSymbol,DEFAULT('_ABCDllMode_'),REQ
+            #PROMPT('Enabling compiler options',OPTION),%OptionProjectSymbolValue,CHOICE
+            #PROMPT('Link Mode',RADIO),VALUE(1)
+            #PROMPT('Dll Mode',RADIO),VALUE(2)
+          #ENDENABLE
+        #ENDBOXED
+        #BOXED('Export define symbols'),WHERE(%ExportProjectSymbolSetting=1 AND %ProjectCompilerSymbolSettings=1)
+          #ENABLE(%ExportProjectSymbolSetting=1)
+            #DISPLAY()
+            #PROMPT('Export project symbol',@s100),%ExportProjectSymbol,DEFAULT('_Export_Joliciel_Classes_'),REQ
+            #PROMPT('Enabling export project if check',CHECK),%ExportProjectSymbolValue,DEFAULT(1)
+          #ENDENABLE
+          #DISPLAY()
+        #ENDBOXED
+      #ENDENABLE
+      #DISPLAY()
+    #ENDBOXED
+  #ENDTAB
+  #TAB('Extension Important Note')
+    #DISPLAY()
+    #DISPLAY()
+    #DISPLAY()
+    #BOXED('When changing or deleting base class')
+      #DISPLAY()
+      #DISPLAY('1) Regarding the Base Class, if, for some reason, we need to change or delete the ABC class from the')
+      #DISPLAY('   GlobalEmbedObject extension, it may be done here. Before getting to the Global Embeds we must save')
+      #DISPLAY('   the app, exit from the app solution and reload the application otherwise, the application in the IDE')
+      #DISPLAY('   will crash. By doing this, we prevent the IDE to crash. Consequently, when we do so, the change made')
+      #DISPLAY('   within the Global Objects|ABC objects|Joliciel class tree the GlobalEmbedObject instances base class')
+      #DISPLAY('   will appear correctly.')
+      #DISPLAY()
+      #DISPLAY('2) If other settings are changed, like renaming the class name or alteration to the project compiler')
+      #DISPLAY('   settings, there is no need to exit from the application. We do not have to worry about getting back')
+      #DISPLAY('   to the Global Embed. We may go directly to the area.')
+      #DISPLAY()
+    #ENDBOXED
+    #DISPLAY()
+    #DISPLAY()
+    #BOXED('Understanding Project Compiler Symbol Settings')
+      #DISPLAY()
+      #DISPLAY('1) Regarding Project Symbol Settings, if the same defined symbols are used in multiple GlobalEmbedObject')
+      #DISPLAY('   extensions the settings must be identical in each extension instance otherwise error may occur.')
+      #DISPLAY('   As an example if _ABCLinkMode_=1 and _ABCDllMode_=0, therefore, all extension settings must be')
+      #DISPLAY('   duplicated or the other extension Project Symbol Settings are unchecked meaning the assignment to the')
+      #DISPLAY('   project definition is disabled. Like so, we are preventing the error occurring and the application will')
+      #DISPLAY('   compile and run correctly.')
+      #DISPLAY()
+      #DISPLAY('2) Base on what said about the point 1 above, only one project defined is sent to the project compiler')
+      #DISPLAY('   defined symbols.')
+      #DISPLAY()
+      #DISPLAY('3) The good thing having this assigns here we know which symbol definition represents the class of the')
+      #DISPLAY('   embedded object and its status.')
+      #DISPLAY()
+      #DISPLAY('4) If, for some reason, the compiler symbols are missing in the Project Compiler Options, and here the')
+      #DISPLAY('   Project Compiler Symbol Settings is disabled; the application will not run the exception or an')
+      #DISPLAY('   unresolve error will appear, unless some other area through the application is taking care of the')
+      #DISPLAY('   defined compiler symbols.')
+      #DISPLAY()
+    #ENDBOXED
+  #ENDTAB  
+  #TAB('Project Symbol Settings Explained')
+    #DISPLAY()
+    #BOXED('')
+      #DISPLAY()
+      #DISPLAY('The compilation project symbol is required by the compiler.')
+      #DISPLAY()
+      #DISPLAY('The settings below will add the values under the Project Options Compiler Tab')
+      #DISPLAY('within the conditionals compilation symbols list.')
+      #DISPLAY('A project symbol for a LINK set at 0 or 1')
+      #DISPLAY('A project symbol for a DLL, set at 0 or 1')
+      #DISPLAY()
+      #DISPLAY('Example:')
+      #DISPLAY('The ABC class the project symbols are when it is linked to an exe file.')
+      #DISPLAY('for a DLL is _ABCDllMode_ = 0')
+      #DISPLAY('for a EXE is _ABCLinkMode_ = 1')
+      #DISPLAY()
+    #ENDBOXED
+    #DISPLAY()
+    #BOXED('NOTE')
+      #DISPLAY()
+      #DISPLAY('1) If the project symbol settings are not done here, it will need to be added within the Project Options Compiler')
+      #DISPLAY('   Tab manually.')
+      #DISPLAY()
+      #DISPLAY('2) Regarding the project symbol settings, if the same project symbol is reused in a multiple class object only one')
+      #DISPLAY('   class object may enable the project symbol settings. The others may be disabled if not only a single class object')
+      #DISPLAY('   that uses the project symbol settings will be added to the compiler conditional project options.')
+      #DISPLAY()
+      #DISPLAY('3) If enabled on multiple GlobalEmbedObject extensions, the settings to subsequent class object will be then only')
+      #DISPLAY('   informative.')
+      #DISPLAY()
+      #DISPLAY('4) When multiple class objects use the same project symbols settings if the choice is over Export Project Symbol,')
+      #DISPLAY('   then subsequent GlobalEmbedObject extension must also enable the Export Project Symbol Setting with the')
+      #DISPLAY('   identical value otherwise the compiler will generate duplicate messages over the project symbols.')
+      #DISPLAY()
+      #DISPLAY('5) Regarding identical Export Project Symbol on multiple GlobalEmbedObject extension templates, the assignment') 
+      #DISPLAY('   must have the same state value otherwise an unresolved error will appear; the program will not compile')
+      #DISPLAY('   successfully.')
+      #DISPLAY()
+    #ENDBOXED
+    #DISPLAY()
+  #ENDTAB    
+  #TAB('Export File Explained')
+    #DISPLAY()
+    #DISPLAY()
+    #DISPLAY('The purpose having only one project symbols. When the export project symbol setting is set to 1 then')
+    #DISPLAY('the compiler will link to an exe otherwise to 0 it will compile as a Dll. This without the need, to create two')
+    #DISPLAY('defined compile symbols.')
+    #DISPLAY()
+    #DISPLAY('Example on an Export file on how its made')    
+    #DISPLAY()
+    #DISPLAY('A file with the following equates that will represent the LinkMode and DllMode of a class object')
+    #DISPLAY('Name of this file is jcClassProjectOptions.inc')
+    #DISPLAY()
+    #BOXED('Code in jcClassProjectOptions.inc')
+      #DISPLAY()
+      #DISPLAY('ABCIncludeFile(Joliciel)')
+      #DISPLAY('  OMIT(xTERMINATORx,_Export_Joliciel_Classes_)')
+      #DISPLAY('_JCLinkMode_    EQUATE(0)')
+      #DISPLAY('_JCDllMode_      EQUATE(1)')
+      #DISPLAY('xTERMINATORx')
+      #DISPLAY()	
+      #DISPLAY('  COMPILE(xTERMINATORx,_Export_Joliciel_Classes_)')
+      #DISPLAY('_JCLinkMode_    EQUATE(1)')
+      #DISPLAY('_JCDllMode_      EQUATE(0)')
+      #DISPLAY('xTERMINATORx')
+      #DISPLAY()
+    #ENDBOXED
+    #DISPLAY()
+    #DISPLAY('If the Export project symbol Setting is enabled, there is no need to assign and add values to the link and dll modes')
+    #DISPLAY('of a class object only the export project symbol. In the case above if _jcClassProjectOptions_ = 1') 
+    #DISPLAY('the OMIT and COMPILE statements are executed otherwise the OMIT and COMPILE are not executed')
+    #DISPLAY()
+    #DISPLAY(' The following INCLUDE statement is inserted at the top of the declaration file <FileNameOfClass.inc>')
+    #DISPLAY()
+    #BOXED('Code in FileNameOfClass.inc')
+      #DISPLAY()
+      #DISPLAY('ABCIncludeFile(Joliciel)')
+      #DISPLAY(' 	INCLUDE(''jcClassProjectOptions.inc''),ONCE')
+      #DISPLAY()
+    #ENDBOXED
+  #ENDTAB
+#ENDSHEET
+
+#ATSTART 
+  #CALL (%ReadABCFiles(ABC))
+  #CALL (%SetClassDefaults(ABC),'jc' & %ApplicationTemplateInstance ,'jc' & %ApplicationTemplateInstance ,'Initially')
+  #FIX (%pClassName,%ABCBaseClass)
+  #CALL (%SetClassDefaults(ABC), 'jc' & %ApplicationTemplateInstance ,'jc' & %ApplicationTemplateInstance , %ABCBaseClass)
+  #INSERT(%ProjectCompilerSettings)
+#ENDAT
+
+#AT (%GatherObjects)
+  #CALL (%ReadABCFiles(ABC))
+  #INSERT(%ProjectCompilerSettings)
+  #CALL(%AddObjectList(ABC),'jc')	
+  #ADD (%ObjectList, %ThisObjectName)
+  #SET (%ObjectListType,%ABCBaseClass)
+#ENDAT
+
+#AT(%GlobalDataClasses)	
+  #CALL(%SetClassItem( ABC), 'jc' & %ApplicationTemplateInstance )	
+  #INSERT(%GenerateClass(ABC), 'jc' & %ApplicationTemplateInstance,'Global instance and definition'),NOINDENT
+#ENDAT	
+
+#AT (%GlobalData)
+#CALL (%SetClassItem(ABC), 'jc' & %ApplicationTemplateInstance)
+#INSERT (%GenerateClassDefinition(ABC), %ClassLines)
+#ENDAT
+
+#AT (%ProgramProcedures)
+  #!CALL (%GenerateVirtuals(ABC), 'jc' & %ApplicationTemplateInstance, 'Joliciel Global Objects|Abc Objects| ' & %ApplicationTemplateInstanceDescription & '(' & %ThisObjectName & ')' & %ApplicationTemplateInstance, '%EmbedVirtuals(JoliClassGlobalManager)')
+  #CALL (%GenerateVirtuals(ABC), 'jc' & %ApplicationTemplateInstance, 'Global Objects|Abc Objects|Joliciel Class| ' & %ApplicationTemplateInstanceDescription, '%EmbedVirtuals(JoliClassGlobalManager)')
+#ENDAT
+
+#AT (%JoliClassManagerMethodCodeSection,%ApplicationTemplateInstance),PRIORITY(5000),DESCRIPTION('Parent Call'),WHERE(%ParentCallValid())
+  #CALL (%GenerateParentCall(ABC))
+#ENDAT
+
+
+#!
+#! -----  REQUIRED GROUPS  -----
+#!
+  
+#!
+#!
+#GROUP (%EmbedVirtuals, %TreeText, %DataText, %CodeText)
+#EMBED (%JoliClassManagerMethodDataSection, 'Joliciel Class Manager Method Data Section'),%ApplicationTemplateInstance,%pClassMethod,%pClassMethodPrototype,LABEL,DATA,TREE(%TreeText & %DataText)
+  #?CODE
+  #EMBED (%JoliClassManagerMethodCodeSection, 'Joliciel Class Manager Method Code Section'),%ApplicationTemplateInstance,%pClassMethod,%pClassMethodPrototype,TREE(%TreeText & %CodeText)
+#!
+#!
+#GROUP(%ParentCallValid),AUTO
+#DECLARE(%RVal)
+#CALL(%ParentCallValid(ABC)),%RVal
+#RETURN(%RVal)
+#!
+#!
+#GROUP(%JolicielOOPPrompts)
+  #BOXED,HIDE
+    #INSERT(%OOPHiddenPrompts)
+  #ENDBOXED
+  #INSERT(%OOPPrompts(ABC))  
+#!
+#!
+#GROUP(%ProjectCompilerSettings)
+  #IF(%ProjectCompilerSymbolSettings)
+    #CASE(%OptionProjectSymbolValue)
+    #OF(1)
+      #SET(%LinkProjectSymbolValue,1)
+      #SET(%DllProjectSymbolValue,0)
+    #OF(2)
+      #SET(%LinkProjectSymbolValue,0)
+      #SET(%DllProjectSymbolValue,1)
+    #ELSE
+      #SET(%LinkProjectSymbolValue,1)
+      #SET(%DllProjectSymbolValue,0)
+    #ENDCASE
+    #!IF(%ExportProjectSymbolSetting = 1)
+    #IF(%ExportProjectSymbolSetting)
+      #IF (%ExportProjectSymbol <> '')
+        #PDEFINE(%ExportProjectSymbol,%ExportProjectSymbolValue)
+      #ELSE
+        #ASSERT(%LinkProjectSymbol,'The Link project symbol is required for the project')  
+      #ENDIF
+    #ELSE
+      #IF (%LinkProjectSymbol <> '')
+        #PDEFINE(%LinkProjectSymbol,%LinkProjectSymbolValue)
+      #ELSE
+        #ASSERT(%LinkProjectSymbol,'The Link project symbol is required for the project')  
+      #ENDIF
+      #IF (%DllProjectSymbol <> '')
+        #PDEFINE(%DllProjectSymbol,%DllProjectSymbolValue)
+      #ELSE
+        #ASSERT(%DllProjectSymbol,'The Dll project symbol is required for the project')  
+      #ENDIF
+    #ENDIF
+  #ENDIF
+  

@@ -1,0 +1,540 @@
+[APPLICATION]
+PROCEDURE Main
+DICTIONARY 'C:\Users\Public\Documents\SoftVelocity\Clarion11\Accessory\Joliciel\Contact\Contact.dct'
+[COMMON]
+FROM ABC
+[PROMPTS]
+%ActiveInvisible  DEFAULT (0)
+%AllowUnFilled    DEFAULT (0)
+%RetainRow        DEFAULT (1)
+%ResetOnGainFocus DEFAULT (0)
+%AutoToolBar      DEFAULT (1)
+%AutoRefresh      DEFAULT (1)
+[PROCEDURE]
+NAME Main
+[COMMON]
+DESCRIPTION 'Wizard Application for C:\Users\Public\Documents\SoftVelocity\Clarion11\Accessory\Joliciel\Contact\Contact.dct'
+FROM ABC Frame
+[DATA]
+[FILES]
+[PROMPTS]
+%ButtonAction DEPEND %Control STRING TIMES 1
+WHEN  ('?BrowseContact') ('Call a Procedure')
+
+%ButtonRunName DEPEND %Control STRING TIMES 1
+WHEN  ('?BrowseContact') ('')
+
+%ButtonRunParameters DEPEND %Control STRING TIMES 1
+WHEN  ('?BrowseContact') ('')
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 1
+WHEN  ('?BrowseContact') (BrowseContact)
+
+%ButtonThread DEPEND %Control LONG TIMES 1
+WHEN  ('?BrowseContact') (1)
+
+%ButtonThreadStack DEPEND %Control @n7 TIMES 1
+WHEN  ('?BrowseContact') (50000)
+
+%ButtonParameters DEPEND %Control STRING TIMES 1
+WHEN  ('?BrowseContact') ('')
+
+%ButtonRequest DEPEND %Control STRING TIMES 1
+WHEN  ('?BrowseContact') ('')
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+[WINDOW]
+AppFrame APPLICATION('Application'),AT(,,505,318),STATUS(-1,80,120,45),MAX,RESIZE,ICON('WAFRAME.ICO'),FONT('Microsoft Sans Serif',8,,400,1),CENTER,SYSTEM
+  MENUBAR,USE(?Menubar)
+       MENU('&File'),USE(?FileMenu)
+       ITEM('&Print Setup ...'),USE(?PrintSetup),MSG('Setup printer'),STD(STD:PrintSetup)
+       ITEM,SEPARATOR
+       ITEM('E&xit'),USE(?Exit),MSG('Exit this application'),STD(STD:Close)
+       END
+       MENU('&Edit'),USE(?EditMenu)
+       ITEM('Cu&t'),USE(?Cut),MSG('Cut Selection To Clipboard'),STD(STD:Cut)
+       ITEM('&Copy'),USE(?Copy),MSG('Copy Selection To Clipboard'),STD(STD:Copy)
+       ITEM('&Paste'),USE(?Paste),MSG('Paste From Clipboard'),STD(STD:Paste)
+       END
+       MENU('&Browse'),USE(?BrowseMenu)
+       ITEM('Browse the Contact file'),USE(?BrowseContact),MSG('Browse Contact')
+       END
+       MENU('&Window'),USE(?WindowMenu),STD(STD:WindowList)
+       ITEM('T&ile'),USE(?Tile),MSG('Arrange multiple opened windows'),STD(STD:TileWindow)
+       ITEM('&Cascade'),USE(?Cascade),MSG('Arrange multiple opened windows'),STD(STD:CascadeWindow)
+       ITEM('&Arrange Icons'),USE(?Arrange),MSG('Arrange the icons for minimized windows'),STD(STD:ArrangeIcons)
+       END
+       MENU('&Help'),USE(?HelpMenu)
+       ITEM('&Contents'),USE(?Helpindex),MSG('View the contents of the help file'),STD(STD:HelpIndex)
+       ITEM('&Search for Help On...'),USE(?HelpSearch),MSG('Search for help on a subject'),STD(STD:HelpSearch)
+       ITEM('&How to Use Help'),USE(?HelpOnHelp),MSG('Provides general instructions on using help'),STD(STD:HelpOnHelp)
+       END
+  END
+ END
+[PROCEDURE]
+NAME BrowseContact
+CATEGORY 'Browse'
+[COMMON]
+DESCRIPTION 'Browse the Contact file'
+FROM ABC Window
+[DATA]
+CurrentTab                STRING(80)
+[FILES]
+[PRIMARY]
+Contact
+[INSTANCE]
+1
+[KEY]
+Con:Address1Key
+[PROMPTS]
+%ButtonAction DEPEND %Control STRING TIMES 0
+
+%ButtonRunName DEPEND %Control STRING TIMES 0
+
+%ButtonRunParameters DEPEND %Control STRING TIMES 0
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ButtonThread DEPEND %Control LONG TIMES 0
+
+%ButtonThreadStack DEPEND %Control @n7 TIMES 0
+
+%ButtonParameters DEPEND %Control STRING TIMES 0
+
+%ButtonRequest DEPEND %Control STRING TIMES 0
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+[ADDITION]
+NAME ABC BrowseBox
+[INSTANCE]
+INSTANCE 1
+PROCPROP
+[PROMPTS]
+%AcceptToolbarControl LONG (0)
+%EnableQuickScan LONG  (0)
+
+%LocatorType DEFAULT  ('Step')
+%OverrideDefaultLocator DEFAULT ('')
+%OverrideLocator DEFAULT ('')
+
+%RecordFilter @S255  ('')
+
+%RangeField COMPONENT  ()
+
+%RangeLimitType DEFAULT  ('')
+%RangeLimit FIELD  ()
+%RangeLow FIELD  ()
+%RangeHigh FIELD  ()
+%RangeFile FILE  ()
+%ScrollBehavior DEFAULT  ('Movable Thumb')
+%ScrollKeyDistribution STRING  ('Runtime')
+%CustomKeyDistribution MULTI LONG  ()
+%KeyDistributionValue DEPEND %CustomKeyDistribution @S10 TIMES 0
+
+%ScrollAlpha LONG  (1)
+%ScrollNumeric LONG  (0)
+%ScrollAlt LONG  (0)
+%SortOrder MULTI LONG  (1,2,3,4,5,6,7,8,9)
+%SortCondition DEPEND %SortOrder @S255 TIMES 9
+WHEN  (1) ('CHOICE(?CurrentTab) = 2')
+WHEN  (2) ('CHOICE(?CurrentTab) = 3')
+WHEN  (3) ('CHOICE(?CurrentTab) = 4')
+WHEN  (4) ('CHOICE(?CurrentTab) = 5')
+WHEN  (5) ('CHOICE(?CurrentTab) = 6')
+WHEN  (6) ('CHOICE(?CurrentTab) = 7')
+WHEN  (7) ('CHOICE(?CurrentTab) = 8')
+WHEN  (8) ('CHOICE(?CurrentTab) = 9')
+WHEN  (9) ('CHOICE(?CurrentTab) = 10')
+%SortKey DEPEND %SortOrder KEY TIMES 9
+WHEN  (1) (Con:Address2Key)
+WHEN  (2) (Con:CountryKey)
+WHEN  (3) (Con:PostalCodeKey)
+WHEN  (4) (Con:HomePhoneKey)
+WHEN  (5) (Con:OfficePhoneKey)
+WHEN  (6) (Con:FaxPhoneKey)
+WHEN  (7) (Con:RecIDKey)
+WHEN  (8) (Con:LastNameKey)
+WHEN  (9) (Con:RegionKey)
+%SortLocatorType DEPEND %SortOrder DEFAULT TIMES 9
+WHEN  (1) ('Step')
+WHEN  (2) ('Step')
+WHEN  (3) ('Step')
+WHEN  (4) ('Step')
+WHEN  (5) ('Step')
+WHEN  (6) ('Step')
+WHEN  (7) ('Step')
+WHEN  (8) ('Step')
+WHEN  (9) ('Step')
+%SortOverrideDefaultLocator DEPEND %SortOrder DEFAULT TIMES 9
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+%SortOverrideLocator DEPEND %SortOrder DEFAULT TIMES 9
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+%SortRecordFilter DEPEND %SortOrder @S255 TIMES 9
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+%SortRangeField DEPEND %SortOrder COMPONENT TIMES 0 !HOLA 0
+%SortRangeLimit DEPEND %SortOrder FIELD TIMES 9
+WHEN  (1) ()
+WHEN  (2) ()
+WHEN  (3) ()
+WHEN  (4) ()
+WHEN  (5) ()
+WHEN  (6) ()
+WHEN  (7) ()
+WHEN  (8) ()
+WHEN  (9) ()
+%SortRangeLow DEPEND %SortOrder FIELD TIMES 9
+WHEN  (1) ()
+WHEN  (2) ()
+WHEN  (3) ()
+WHEN  (4) ()
+WHEN  (5) ()
+WHEN  (6) ()
+WHEN  (7) ()
+WHEN  (8) ()
+WHEN  (9) ()
+%SortRangeHigh DEPEND %SortOrder FIELD TIMES 9
+WHEN  (1) ()
+WHEN  (2) ()
+WHEN  (3) ()
+WHEN  (4) ()
+WHEN  (5) ()
+WHEN  (6) ()
+WHEN  (7) ()
+WHEN  (8) ()
+WHEN  (9) ()
+%SortRangeFile DEPEND %SortOrder FILE TIMES 9
+WHEN  (1) ()
+WHEN  (2) ()
+WHEN  (3) ()
+WHEN  (4) ()
+WHEN  (5) ()
+WHEN  (6) ()
+WHEN  (7) ()
+WHEN  (8) ()
+WHEN  (9) ()
+%SortRangeLimitType DEPEND %SortOrder DEFAULT TIMES 9
+WHEN  (1) ('')
+WHEN  (2) ('')
+WHEN  (3) ('')
+WHEN  (4) ('')
+WHEN  (5) ('')
+WHEN  (6) ('')
+WHEN  (7) ('')
+WHEN  (8) ('')
+WHEN  (9) ('')
+%SortScrollBehavior DEPEND %SortOrder DEFAULT TIMES 9
+WHEN  (1) ('Movable Thumb')
+WHEN  (2) ('Movable Thumb')
+WHEN  (3) ('Movable Thumb')
+WHEN  (4) ('Movable Thumb')
+WHEN  (5) ('Movable Thumb')
+WHEN  (6) ('Movable Thumb')
+WHEN  (7) ('Movable Thumb')
+WHEN  (8) ('Movable Thumb')
+WHEN  (9) ('Movable Thumb')
+%SortScrollKeyDistribution DEPEND %SortOrder STRING TIMES 9
+WHEN  (1) ('Runtime')
+WHEN  (2) ('Runtime')
+WHEN  (3) ('Runtime')
+WHEN  (4) ('Runtime')
+WHEN  (5) ('Runtime')
+WHEN  (6) ('Runtime')
+WHEN  (7) ('Runtime')
+WHEN  (8) ('Runtime')
+WHEN  (9) ('Runtime')
+%SortCustomKeyDistribution DEPEND %SortOrder MULTI LONG TIMES 0
+%SortKeyDistributionValue DEPEND %SortCustomKeyDistribution @S10 TIMES 9
+WHEN  (1)TIMES 0
+WHEN  (2)TIMES 0
+WHEN  (3)TIMES 0
+WHEN  (4)TIMES 0
+WHEN  (5)TIMES 0
+WHEN  (6)TIMES 0
+WHEN  (7)TIMES 0
+WHEN  (8)TIMES 0
+WHEN  (9)TIMES 0
+%SortScrollAlpha DEPEND %SortOrder LONG TIMES 9
+WHEN  (1) (1)
+WHEN  (2) (1)
+WHEN  (3) (1)
+WHEN  (4) (1)
+WHEN  (5) (1)
+WHEN  (6) (1)
+WHEN  (7) (1)
+WHEN  (8) (1)
+WHEN  (9) (1)
+%SortScrollNumeric DEPEND %SortOrder LONG TIMES 9
+WHEN  (1) (0)
+WHEN  (2) (0)
+WHEN  (3) (0)
+WHEN  (4) (0)
+WHEN  (5) (0)
+WHEN  (6) (0)
+WHEN  (7) (0)
+WHEN  (8) (0)
+WHEN  (9) (0)
+%SortScrollAlt DEPEND %SortOrder LONG TIMES 9
+WHEN  (1) (0)
+WHEN  (2) (0)
+WHEN  (3) (0)
+WHEN  (4) (0)
+WHEN  (5) (0)
+WHEN  (6) (0)
+WHEN  (7) (0)
+WHEN  (8) (0)
+WHEN  (9) (0)
+[ADDITION]
+NAME ABC BrowseViewButton
+[INSTANCE]
+INSTANCE 2
+PARENT 1
+[ADDITION]
+NAME ABC BrowseUpdateButtons
+[INSTANCE]
+INSTANCE 3
+PARENT 1
+PROCPROP
+[PROMPTS]
+%UpdateProcedure PROCEDURE  (UpdateContact)
+%EditViaPopup LONG  (1)
+[ADDITION]
+NAME ABC CloseButton
+[INSTANCE]
+INSTANCE 4
+[ADDITION]
+NAME ABC HelpButton
+[INSTANCE]
+INSTANCE 5
+[ADDITION]
+NAME ABC WindowResize
+[INSTANCE]
+INSTANCE 6
+[PROMPTS]
+%UseAppStrategy    DEFAULT (1)
+%AppStrategy       DEFAULT ('Surface')
+%RestrictMinSize   DEFAULT (1)
+%WindowMinWidth    DEFAULT (0)
+%WindowMaxWidth    DEFAULT (0)
+[WINDOW]
+QuickWindow WINDOW('Browse the Contact file'),AT(,,358,198),IMM,RESIZE,GRAY,MDI,HLP('BrowseContact'),FONT('Microsoft Sans Serif',8,,400,1),CENTER,SYSTEM
+    LIST,AT(8,30,342,124),USE(?Browse:1),MSG('Browsing the Contact file'),IMM,HVSCROLL,|
+      FORMAT('64R(2)|M~Rec ID~C(0)@n-14@80L(2)|M~Last Name~L(2)@s60@80L(2)|M~First Name~L(2)@s60@80L(2)|M~Address 1~L(2)@s55@80L(2)|M~Address 2~L(2)@s60@80L(2)|M~City~L(2)@s50@80L(2)|M~Region~L(2)@s35@80L(2)|M~Country~L(2)@s40@80L(2)|M~Postal Code~L(2)@s25@'),|
+      FROM(Queue:Browse:1),#SEQ(1),#ORIG(?List),#FIELDS(Con:RecID,Con:LastName,Con:FirstName,Con:Address1,Con:Address2,Con:City,Con:Region,Con:Country,Con:PostalCode)
+    BUTTON('&View'),AT(142,158,49,14),USE(?View:2),ICON('WAVIEW.ICO'),FLAT,MSG('View Record'),TIP('View Record'),LEFT,#SEQ(2),#ORIG(?View)
+    BUTTON('&Insert'),AT(195,158,49,14),USE(?Insert:3),ICON('WAINSERT.ICO'),FLAT,MSG('Insert a Record'),TIP('Insert a Record'),LEFT,#SEQ(3),#ORIG(?Insert),#LINK(?Change:3)
+    BUTTON('&Change'),AT(248,158,49,14),USE(?Change:3),ICON('WACHANGE.ICO'),FLAT,MSG('Change the Record'),TIP('Change the Record'),LEFT,DEFAULT,#SEQ(3),#ORIG(?Change),#LINK(?Delete:3)
+    BUTTON('&Delete'),AT(301,158,49,14),USE(?Delete:3),ICON('WADELETE.ICO'),FLAT,MSG('Delete the Record'),TIP('Delete the Record'),LEFT,#SEQ(3),#ORIG(?Delete),#LINK(?Insert:3)
+  SHEET,AT(4,4,350,172),USE(?CurrentTab),#ORIG(CurrentTab)
+    TAB('&1) Address1Key'),USE(?Tab:2)
+    END
+    TAB('&2) Address2Key'),USE(?Tab:3)
+    END
+    TAB('&3) CountryKey'),USE(?Tab:4)
+    END
+    TAB('&4) PostalCodeKey'),USE(?Tab:5)
+    END
+    TAB('&5) HomePhoneKey'),USE(?Tab:6)
+    END
+    TAB('&6) OfficePhoneKey'),USE(?Tab:7)
+    END
+    TAB('&7) FaxPhoneKey'),USE(?Tab:8)
+    END
+    TAB('&8) RecIDKey'),USE(?Tab:9)
+    END
+    TAB('&9) LastNameKey'),USE(?Tab:10)
+    END
+    TAB('&10) RegionKey'),USE(?Tab:11)
+    END
+  END
+  BUTTON('&Close'),AT(252,180,49,14),USE(?Close),ICON('WACLOSE.ICO'),FLAT,MSG('Close Window'),TIP('Close Window'),LEFT,#SEQ(4),#ORIG(?Close)
+  BUTTON('&Help'),AT(305,180,49,14),USE(?Help),ICON('WAHELP.ICO'),FLAT,MSG('See Help Window'),TIP('See Help Window'),LEFT,STD(STD:Help),#SEQ(5),#ORIG(?Help)
+ END
+[PROCEDURE]
+NAME UpdateContact
+CATEGORY 'Form'
+[COMMON]
+DESCRIPTION 'Form Contact'
+FROM ABC Window
+[DATA]
+CurrentTab                STRING(80)
+[FILES]
+[PRIMARY]
+Contact
+[INSTANCE]
+2
+[PROMPTS]
+%ButtonAction DEPEND %Control STRING TIMES 0
+
+%ButtonRunName DEPEND %Control STRING TIMES 0
+
+%ButtonRunParameters DEPEND %Control STRING TIMES 0
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ButtonThread DEPEND %Control LONG TIMES 0
+
+%ButtonThreadStack DEPEND %Control @n7 TIMES 0
+
+%ButtonParameters DEPEND %Control STRING TIMES 0
+
+%ButtonRequest DEPEND %Control STRING TIMES 0
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+[ADDITION]
+NAME ABC RecordValidation
+[INSTANCE]
+INSTANCE 1
+PROCPROP
+[PROMPTS]
+%ValidateOnAccept LONG  (1)
+%ValidateOnNonStopSelect LONG  (1)
+%ControlsExcluded MULTI LONG  ()
+%ControlToExclude DEPEND %ControlsExcluded STRING TIMES 0
+[ADDITION]
+NAME ABC SaveButton
+[INSTANCE]
+INSTANCE 2
+PROCPROP
+[PROMPTS]
+%InsertAllowed LONG  (1)
+%InsertMessage @S40  ('Record Will Be Added')
+%ChangeAllowed LONG  (1)
+%ChangeMessage @S40  ('Record Will Be Changed')
+%DeleteAllowed LONG  (1)
+%DeleteMessage @S40  ('Record Will Be Deleted')
+%ViewMessage @S40  ('View Record')
+%MessageHeader LONG  (0)
+%ActionOnDelete STRING  ('Standard Warning')
+%PrimingFields MULTI LONG  ()
+%PrimedField DEPEND %PrimingFields FIELD TIMES 0
+
+%PrimedValue DEPEND %PrimingFields @S255 TIMES 0
+
+%ActionOnCancel STRING  ('Confirm cancel')
+%MessageLocation STRING  ('Title Bar')
+%MessageStatusSection @n1  (0)
+
+%HistoryKey        DEFAULT (CtrlH)
+
+%AppendToTitle LONG  ()
+%AppendToTitleID @S255  ('')
+[ADDITION]
+NAME ABC CancelButton
+[INSTANCE]
+INSTANCE 3
+[ADDITION]
+NAME ABC HelpButton
+[INSTANCE]
+INSTANCE 4
+[ADDITION]
+NAME ABC ViewFormActions
+[INSTANCE]
+INSTANCE 5
+[ADDITION]
+NAME ABC WindowResize
+[INSTANCE]
+INSTANCE 6
+[PROMPTS]
+%UseAppStrategy    DEFAULT (1)
+%AppStrategy       DEFAULT ('Surface')
+%RestrictMinSize   DEFAULT (1)
+%WindowMinWidth    DEFAULT (0)
+%WindowMaxWidth    DEFAULT (0)
+[WINDOW]
+QuickWindow WINDOW('Form Contact'),AT(,,316,182),RESIZE,IMM,GRAY,MDI,HLP('UpdateContact'),FONT('Microsoft Sans Serif',8,,400,1),CENTER,SYSTEM
+  SHEET,AT(4,4,308,156),USE(?CurrentTab),#ORIG(CurrentTab)
+    TAB('&1) General'),USE(?Tab:1)
+         PROMPT('Rec ID:'),USE(?Con:RecID:Prompt),TRN,AT(8,20),#ORIG(?Con:RecID:Prompt),#LINK(Con:RecID)
+         ENTRY(@n-14),USE(Con:RecID),RIGHT(1),AT(64,20,64,10),#ORIG(Con:RecID),#LINK(?Con:RecID:Prompt)
+         PROMPT('Last Name:'),USE(?Con:LastName:Prompt),TRN,AT(8,34),#ORIG(?Con:LastName:Prompt),#LINK(Con:LastName)
+         ENTRY(@s60),USE(Con:LastName),AT(64,34,244,10),#ORIG(Con:LastName),#LINK(?Con:LastName:Prompt)
+         PROMPT('First Name:'),USE(?Con:FirstName:Prompt),TRN,AT(8,48),#ORIG(?Con:FirstName:Prompt),#LINK(Con:FirstName)
+         ENTRY(@s60),USE(Con:FirstName),AT(64,48,244,10),#ORIG(Con:FirstName),#LINK(?Con:FirstName:Prompt)
+         PROMPT('Address 1:'),USE(?Con:Address1:Prompt),TRN,AT(8,62),#ORIG(?Con:Address1:Prompt),#LINK(Con:Address1)
+         ENTRY(@s55),USE(Con:Address1),AT(64,62,224,10),#ORIG(Con:Address1),#LINK(?Con:Address1:Prompt)
+         PROMPT('Address 2:'),USE(?Con:Address2:Prompt),TRN,AT(8,76),#ORIG(?Con:Address2:Prompt),#LINK(Con:Address2)
+         ENTRY(@s60),USE(Con:Address2),AT(64,76,244,10),#ORIG(Con:Address2),#LINK(?Con:Address2:Prompt)
+         PROMPT('City:'),USE(?Con:City:Prompt),TRN,AT(8,90),#ORIG(?Con:City:Prompt),#LINK(Con:City)
+         ENTRY(@s50),USE(Con:City),AT(64,90,204,10),#ORIG(Con:City),#LINK(?Con:City:Prompt)
+         PROMPT('Region:'),USE(?Con:Region:Prompt),TRN,AT(8,104),#ORIG(?Con:Region:Prompt),#LINK(Con:Region)
+         ENTRY(@s35),USE(Con:Region),AT(64,104,144,10),#ORIG(Con:Region),#LINK(?Con:Region:Prompt)
+         PROMPT('Country:'),USE(?Con:Country:Prompt),TRN,AT(8,118),#ORIG(?Con:Country:Prompt),#LINK(Con:Country)
+         ENTRY(@s40),USE(Con:Country),AT(64,118,164,10),#ORIG(Con:Country),#LINK(?Con:Country:Prompt)
+         PROMPT('Postal Code:'),USE(?Con:PostalCode:Prompt),TRN,AT(8,132),#ORIG(?Con:PostalCode:Prompt),#LINK(Con:PostalCode)
+         ENTRY(@s25),USE(Con:PostalCode),AT(64,132,104,10),#ORIG(Con:PostalCode),#LINK(?Con:PostalCode:Prompt)
+         PROMPT('Home Phone:'),USE(?Con:HomePhone:Prompt),TRN,AT(8,146),#ORIG(?Con:HomePhone:Prompt),#LINK(Con:HomePhone)
+         ENTRY(@s20),USE(Con:HomePhone),AT(64,146,84,10),#ORIG(Con:HomePhone),#LINK(?Con:HomePhone:Prompt)
+    END
+    TAB('&2) General (cont.)'),USE(?Tab:2)
+         PROMPT('Office Phone:'),USE(?Con:OfficePhone:Prompt),TRN,AT(8,20),#ORIG(?Con:OfficePhone:Prompt),#LINK(Con:OfficePhone)
+         ENTRY(@s20),USE(Con:OfficePhone),AT(64,20,84,10),#ORIG(Con:OfficePhone),#LINK(?Con:OfficePhone:Prompt)
+         PROMPT('Fax Phone:'),USE(?Con:FaxPhone:Prompt),TRN,AT(8,34),#ORIG(?Con:FaxPhone:Prompt),#LINK(Con:FaxPhone)
+         ENTRY(@s25),USE(Con:FaxPhone),AT(64,34,104,10),#ORIG(Con:FaxPhone),#LINK(?Con:FaxPhone:Prompt)
+         PROMPT('Note:'),USE(?Con:Note:Prompt),TRN,AT(8,48),#ORIG(?Con:Note:Prompt),#LINK(Con:Note)
+         ENTRY(@s20),USE(Con:Note),AT(64,48,84,10),#ORIG(Con:Note),#LINK(?Con:Note:Prompt)
+    END
+  END
+  BUTTON('&OK'),AT(157,164,49,14),USE(?OK),ICON('WAOK.ICO'),FLAT,MSG('Accept data and close the window'),TIP('Accept data and close the window'),LEFT,DEFAULT,#SEQ(2),#ORIG(?OK)
+  BUTTON('&Cancel'),AT(210,164,49,14),USE(?Cancel),ICON('WACANCEL.ICO'),FLAT,MSG('Cancel operation'),TIP('Cancel operation'),LEFT,#SEQ(3),#ORIG(?Cancel)
+  BUTTON('&Help'),AT(263,164,49,14),USE(?Help),ICON('WAHELP.ICO'),FLAT,MSG('See Help Window'),TIP('See Help Window'),LEFT,STD(STD:Help),#SEQ(4),#ORIG(?Help)
+ END
