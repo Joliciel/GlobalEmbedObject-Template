@@ -16,6 +16,7 @@ it possible:
 
 Object Name: AscIIFileObject
 Base Class:  AsciiFileClass
+
 If the need to create a Derive class is required 
 By checking the Derive check box will permit as many as we like procedures within the AscIIFileObject class instance
 as well its Class Properties.
