@@ -21,7 +21,7 @@ By checking the Derive check box will permit as many as we like procedures withi
 as well its Class Properties.
 
 When we add these class instances, there is one thing important to know and understand. If we are compiling the program
-without doing anything else a compiler will post an unresolved or exception error. The cause of this, the compiler
+without doing anything else the compiler will post an unresolved or exception error. The cause of this, the compiler
 needs to know what to do, is it gone be in an exe or a dll. Therefore, we need to set the compiler  LINK and DLL
 symbols' directives in the Project Options Compiler Tab manually. This setting is shown in the Project sub menu.
 For many Clarion ABC classes the LINK compiler symbols directives is _ABCLinkMode_ and for the DLL is _ABCDllMode_. 
@@ -45,22 +45,21 @@ Enabling compiler options
 By selecting "Radio button" Link Mode will assign _ABCLinkMode_ = 1 and _ABCDllMode_=0 otherwise if
 "Radio button" Dll Mode is selected _ABCLinkMode_=0 and _ABCDllMode_=0
 
-This aspect for which it is important to take care of, is the project compiler symbol directives otherwise errors will
-appear.
 
-However, it is important to read the tab notes regarding his usage. Actually, this may be applied to other areas
-that make changes to the Global Embed Area. One, if, for some reason, you need to delete an extension or a derive 
-procedure or renaming the class instance, the need to save the app exit from the application solution and return 
-to the session will prevent the IDE to crash. The reason for doing like so, if we are getting back right after
-doing the above changes, the Clarion IDE will crash, like I said by saving the app session and reloading it,
-the change will be made and shown correctly.
+This aspect for which it is important to take care of, is the project compiler symbol directives must be set otherwise errors will appear.
+
+
+
+However, it is important to read the tab notes regarding his usage. Actually, this may be applied to other areas that make changes to the Global Embed Area. One, if, for some reason, you need to delete an extension or a derive procedure or renaming the class instance, the need to save the app exit from the application solution and return to the session will prevent the IDE to crash. The reason for doing like so, if we are getting back right after doing the above changes to the Global Embed aread, the Clarion IDE will crash, like I said by saving the app session and reloading it, the change will be made and shown correctly.
+
 
 Like said this template is taking care of the Project Compilier Symbol Settings. The only thing we need to know is 
 what are the LINK and DLL symbols the parent class is using. The locations of these symbols are in the include files
 where the classes are declared. The folders where they are placed usually are in the Clarion\LibSrc\win and 
 Clarion\Accessory\LibSrc\Win. Here in the below example, the file is located in the Clarion\LibSrc\win folder
 under ABASCII.INC file with the below header declaration. The symbol is an attribute of the class declaration
-here; the LINK attribute is _ABCLinkMode_ and the DLL attribute is _ABCDllMode_ 
+here; the LINK attribute is _ABCLinkMode_ and the DLL attribute is _ABCDllMode_.
+
 
 Here's where we see these attributes in the ABASCII.INC file
 AsciiFileClass      CLASS,TYPE,MODULE('ABASCII.CLW'),LINK('ABASCII.CLW',_ABCLinkMode_),DLL(_ABCDllMode_)
