@@ -15,6 +15,7 @@ extension template will permit to do so. By providing the following within the e
 it possible:
 
 Object Name: AscIIFileObject
+
 Base Class:  AsciiFileClass
 
 If the need to create a Derive class is required 
@@ -35,12 +36,17 @@ to add the LINK and DLL symbols of the class. Both the LINK and the DLL symbols 
 "Enabling compiler options" the radio button Link Mode or Dll Mode.
 
 In our example
+
 Defined Symbols
+
 Link project compiler defined symbol : _ABCLinkMode_
+
 Dll project compiler defined symbol:    _ABCDllMode_
 
 Enabling compiler options
+
 "Radio button" Link Mode
+
 "Radio button" Dll Mode 
 
 By selecting "Radio button" Link Mode will assign _ABCLinkMode_ = 1 and _ABCDllMode_=0 otherwise if
